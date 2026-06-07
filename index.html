@@ -1,0 +1,427 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Engel — Fragment journal for iPhone</title>
+<meta name="description" content="Engel is a fragment journal for people who already know their patterns but can't seem to break them. One sentence. Green or red. Your ledger remembers." />
+<meta name="keywords" content="Engel, journal, ADHD, patterns, fragment journal, iOS, green red globe" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..500;1,9..144,300..400&family=Inter:wght@300;400;500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{background:#0c0c0e;color:#ece7dd;font-family:"Inter",system-ui,sans-serif;font-size:14px;line-height:1.65;-webkit-font-smoothing:antialiased;overflow-x:hidden;text-rendering:optimizeLegibility}
+
+/* NAV */
+.nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:20px 48px;display:flex;align-items:center;justify-content:space-between;background:rgba(12,12,14,0.88);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(236,231,221,0.06)}
+.nav-logo{font-family:"Fraunces",serif;font-size:19px;font-weight:300;letter-spacing:-0.02em;color:#ece7dd;text-decoration:none}
+.nav-links{display:flex;gap:36px;align-items:center}
+.nav-links a{font-size:13px;font-weight:400;color:rgba(236,231,221,0.45);text-decoration:none;transition:color .2s}
+.nav-links a:hover{color:#ece7dd}
+.nav-cta{background:rgba(236,231,221,0.06);border:1px solid rgba(236,231,221,0.14);color:rgba(236,231,221,0.85);font-family:"Inter",sans-serif;font-size:13px;font-weight:400;padding:8px 20px;border-radius:8px;cursor:pointer;transition:all .2s}
+.nav-cta:hover{background:rgba(236,231,221,0.11);border-color:rgba(236,231,221,0.24);color:#ece7dd}
+
+/* HERO */
+.hero{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 40px 80px;position:relative;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 80% 55% at 50% -10%,rgba(45,158,90,0.09),transparent 68%),radial-gradient(ellipse 60% 40% at 50% 110%,rgba(192,57,43,0.06),transparent 68%);pointer-events:none}
+
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(236,231,221,0.04);border:1px solid rgba(236,231,221,0.1);border-radius:100px;padding:5px 14px 5px 8px;margin-bottom:32px;font-family:"Inter",sans-serif;font-size:12px;font-weight:400;color:rgba(236,231,221,0.5)}
+.badge-dot{width:6px;height:6px;border-radius:50%;background:#4ade80;box-shadow:0 0 8px rgba(74,222,128,0.5);animation:dotPulse 2.5s ease-in-out infinite;flex-shrink:0}
+@keyframes dotPulse{0%,100%{opacity:1;box-shadow:0 0 6px rgba(74,222,128,0.4)}50%{opacity:.7;box-shadow:0 0 12px rgba(74,222,128,0.7)}}
+
+.hero h1{font-family:"Fraunces",serif;font-size:clamp(2.7rem,7vw,4.6rem);font-weight:300;line-height:1.04;letter-spacing:-0.035em;max-width:760px;margin-bottom:22px;color:#ece7dd}
+.hero h1 em{font-style:italic;color:rgba(236,231,221,0.65)}
+
+.hero-sub{font-family:"Inter",sans-serif;font-size:clamp(14px,1.9vw,16px);font-weight:400;color:rgba(236,231,221,0.45);max-width:420px;margin:0 auto 52px;line-height:1.7}
+
+/* GLOBES */
+.hero-globes{display:flex;gap:14px;align-items:center;justify-content:center;margin-bottom:52px}
+.globe{width:54px;height:54px;border-radius:50%;flex-shrink:0}
+.globe-g{background:radial-gradient(circle at 38% 32%,#d6ffe8,#4ade80 36%,#14532d 68%,rgba(10,10,11,0.96));box-shadow:0 0 26px rgba(74,222,128,0.2),0 4px 14px rgba(0,0,0,0.4);animation:breatheG 6.5s ease-in-out infinite}
+.globe-r{background:radial-gradient(circle at 38% 32%,#ffd2c8,#f87171 36%,#4c1414 68%,rgba(10,10,11,0.96));box-shadow:0 0 26px rgba(248,113,113,0.16),0 4px 14px rgba(0,0,0,0.4);animation:breatheR 10s ease-in-out infinite}
+.globe-sep{font-family:"JetBrains Mono",monospace;font-size:11px;color:rgba(236,231,221,0.18);letter-spacing:0.08em}
+@keyframes breatheG{0%,100%{transform:scale(.93)}50%{transform:scale(1.06)}}
+@keyframes breatheR{0%,100%{transform:scale(.97)}50%{transform:scale(1.03)}}
+
+/* WAITLIST */
+.waitlist-wrap{width:100%;max-width:420px;margin:0 auto}
+.waitlist-form{display:flex;gap:0;border-radius:12px;overflow:hidden;border:1px solid rgba(236,231,221,0.12);background:rgba(236,231,221,0.03)}
+.waitlist-input{flex:1;background:transparent;border:none;outline:none;padding:13px 18px;font-family:"Inter",sans-serif;font-size:13px;font-weight:400;color:#ece7dd;min-width:0}
+.waitlist-input::placeholder{color:rgba(236,231,221,0.28)}
+.waitlist-btn{background:rgba(236,231,221,0.08);border:none;border-left:1px solid rgba(236,231,221,0.1);padding:13px 22px;font-family:"Inter",sans-serif;font-size:13px;font-weight:500;color:rgba(236,231,221,0.85);cursor:pointer;white-space:nowrap;transition:background .2s}
+.waitlist-btn:hover{background:rgba(236,231,221,0.14);color:#ece7dd}
+.hero-note{margin-top:12px;font-family:"Inter",sans-serif;font-size:12px;font-weight:400;color:rgba(236,231,221,0.22)}
+
+/* MARQUEE */
+.marquee-section{padding:56px 0;border-top:1px solid rgba(236,231,221,0.06);overflow:hidden;position:relative}
+.marquee-section::before,.marquee-section::after{content:"";position:absolute;top:0;bottom:0;width:120px;z-index:2;pointer-events:none}
+.marquee-section::before{left:0;background:linear-gradient(to right,#0c0c0e,transparent)}
+.marquee-section::after{right:0;background:linear-gradient(to left,#0c0c0e,transparent)}
+.marquee-label{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.2em;text-transform:uppercase;color:rgba(236,231,221,0.25);text-align:center;margin-bottom:20px}
+.marquee-track{display:flex;animation:marqueeScroll 28s linear infinite}
+.marquee-track:hover{animation-play-state:paused}
+.marquee-set{display:flex;gap:12px;padding-right:12px;flex-shrink:0}
+.m-pill{display:inline-flex;align-items:center;gap:8px;border:1px solid rgba(236,231,221,0.1);border-radius:100px;padding:8px 18px;font-family:"Inter",sans-serif;font-size:12px;font-weight:400;color:rgba(236,231,221,0.55);white-space:nowrap;background:rgba(236,231,221,0.025);transition:all .25s;cursor:default;flex-shrink:0}
+.m-pill:hover{border-color:rgba(236,231,221,0.22);color:rgba(236,231,221,0.85);background:rgba(236,231,221,0.04)}
+.m-pill-dot{width:5px;height:5px;border-radius:50%;flex-shrink:0}
+.m-pill-dot.g{background:#4ade80;box-shadow:0 0 6px rgba(74,222,128,0.5)}
+.m-pill-dot.r{background:#f87171;box-shadow:0 0 6px rgba(248,113,113,0.4)}
+.m-pill-dot.n{background:rgba(236,231,221,0.3)}
+@keyframes marqueeScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* SECTIONS */
+.section{padding:80px 48px;max-width:1040px;margin:0 auto}
+.section-inner{border-top:1px solid rgba(236,231,221,0.06);padding-top:64px}
+.section-tag{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.22em;text-transform:uppercase;color:rgba(236,231,221,0.28);margin-bottom:18px}
+.section-title{font-family:"Fraunces",serif;font-size:clamp(1.7rem,4vw,2.5rem);font-weight:300;letter-spacing:-0.025em;line-height:1.1;margin-bottom:18px;color:#ece7dd}
+.section-body{font-family:"Inter",sans-serif;font-size:14px;font-weight:400;color:rgba(236,231,221,0.5);max-width:50ch;line-height:1.75}
+
+/* HOW IT WORKS */
+.loop-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:rgba(236,231,221,0.06);border:1px solid rgba(236,231,221,0.06);border-radius:18px;overflow:hidden;margin-top:40px}
+.loop-cell{background:#0c0c0e;padding:30px 26px;transition:background .2s}
+.loop-cell:hover{background:rgba(236,231,221,0.02)}
+.loop-num{font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(236,231,221,0.22);margin-bottom:16px}
+.loop-name{font-family:"Fraunces",serif;font-size:1.4rem;font-weight:300;margin-bottom:12px;color:#ece7dd}
+.loop-desc{font-family:"Inter",sans-serif;font-size:13px;font-weight:400;color:rgba(236,231,221,0.43);line-height:1.7}
+
+/* SCREENSHOTS */
+.shots{display:grid;grid-template-columns:repeat(5,1fr);gap:14px;margin-top:40px}
+.shot-wrap{display:flex;flex-direction:column;gap:10px}
+.shot-img{width:100%;aspect-ratio:9/19.5;background:rgba(236,231,221,0.03);border:1px solid rgba(236,231,221,0.07);border-radius:18px;overflow:hidden}
+.shot-img img{width:100%;height:100%;object-fit:cover;display:block}
+.shot-name{font-family:"Fraunces",serif;font-size:13px;font-weight:300;color:rgba(236,231,221,0.7);text-align:center}
+.shot-label{font-family:"Inter",sans-serif;font-size:11px;font-weight:400;color:rgba(236,231,221,0.3);text-align:center;line-height:1.5}
+
+/* WHAT IT'S NOT */
+.not-grid{display:grid;grid-template-columns:1fr 1fr;gap:1px;background:rgba(236,231,221,0.06);border:1px solid rgba(236,231,221,0.06);border-radius:18px;overflow:hidden;margin-top:36px}
+.not-item{background:#0c0c0e;padding:20px 26px;font-family:"Inter",sans-serif;font-size:13px;font-weight:400;color:rgba(236,231,221,0.4);display:flex;align-items:flex-start;gap:12px;transition:background .2s}
+.not-item:hover{background:rgba(236,231,221,0.02)}
+.not-dash{font-family:"JetBrains Mono",monospace;color:rgba(236,231,221,0.18);flex-shrink:0;margin-top:1px}
+
+/* VOICE */
+.voice-block{margin-top:40px;display:flex;flex-direction:column;gap:1px;background:rgba(236,231,221,0.06);border:1px solid rgba(236,231,221,0.06);border-radius:18px;overflow:hidden}
+.voice-row{background:#0c0c0e;padding:20px 26px;display:grid;grid-template-columns:110px 1fr;gap:20px;align-items:start;transition:background .2s}
+.voice-row:hover{background:rgba(236,231,221,0.02)}
+.voice-row+.voice-row{border-top:1px solid rgba(236,231,221,0.06)}
+.voice-tag{font-family:"JetBrains Mono",monospace;font-size:9px;letter-spacing:0.14em;text-transform:uppercase;padding-top:3px}
+.voice-tag.bad{color:rgba(248,113,113,0.5)}
+.voice-tag.good{color:rgba(74,222,128,0.6)}
+.voice-text{font-family:"Inter",sans-serif;font-size:13px;font-weight:400;font-style:italic;color:rgba(236,231,221,0.5);line-height:1.6}
+.voice-text.good-text{color:rgba(236,231,221,0.82);font-style:normal}
+
+/* FAQ */
+.faq-list{margin-top:40px;border:1px solid rgba(236,231,221,0.06);border-radius:18px;overflow:hidden}
+.faq-item{background:#0c0c0e;border-bottom:1px solid rgba(236,231,221,0.06)}
+.faq-item:last-child{border-bottom:none}
+.faq-trigger{width:100%;background:none;border:none;padding:22px 26px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;text-align:left;gap:16px;transition:background .2s}
+.faq-trigger:hover{background:rgba(236,231,221,0.02)}
+.faq-q{font-family:"Fraunces",serif;font-size:1rem;font-weight:300;color:rgba(236,231,221,0.85);line-height:1.35}
+.faq-icon{width:22px;height:22px;border:1px solid rgba(236,231,221,0.12);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;color:rgba(236,231,221,0.35);font-size:15px;line-height:1;transition:all .3s;font-family:monospace}
+.faq-body{padding:0 26px;font-family:"Inter",sans-serif;font-size:13px;font-weight:400;color:rgba(236,231,221,0.45);line-height:1.75;max-height:0;overflow:hidden;transition:max-height .35s ease,padding .2s}
+.faq-item.open .faq-body{max-height:200px;padding:0 26px 22px}
+.faq-item.open .faq-icon{transform:rotate(45deg);border-color:rgba(236,231,221,0.28)}
+
+/* FOOTER */
+footer{margin-top:48px;padding:48px 48px;border-top:1px solid rgba(236,231,221,0.06);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:20px}
+.footer-brand{font-family:"Fraunces",serif;font-size:17px;font-weight:300;color:#ece7dd;margin-bottom:5px}
+.footer-sub{font-family:"Inter",sans-serif;font-size:12px;font-weight:400;color:rgba(236,231,221,0.3)}
+.footer-right{font-family:"Inter",sans-serif;font-size:12px;color:rgba(236,231,221,0.28);text-align:right}
+.footer-right a{color:rgba(236,231,221,0.42);text-decoration:none;border-bottom:1px solid rgba(236,231,221,0.12);transition:color .2s}
+.footer-right a:hover{color:#ece7dd}
+
+/* RESPONSIVE */
+@media(max-width:720px){
+  .nav{padding:16px 24px}
+  .nav-links a{display:none}
+  .hero{padding:100px 24px 60px}
+  .section{padding:60px 24px}
+  .loop-grid{grid-template-columns:1fr}
+  .shots{grid-template-columns:repeat(3,1fr)}
+  .not-grid{grid-template-columns:1fr}
+  footer{padding:40px 24px;flex-direction:column;align-items:flex-start}
+  .footer-right{text-align:left}
+}
+@media(max-width:440px){
+  .shots{grid-template-columns:repeat(2,1fr)}
+}
+@media(prefers-reduced-motion:reduce){
+  .badge-dot,.globe-g,.globe-r,.marquee-track{animation:none!important}
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <a class="nav-logo" href="#">Engel</a>
+  <div class="nav-links">
+    <a href="#how">How it works</a>
+    <a href="#screens">Screens</a>
+    <a href="#faq">FAQ</a>
+    <button class="nav-cta" onclick="document.getElementById('email-input').focus()">Get early access</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+
+  <div class="hero-badge">
+    <span class="badge-dot"></span>
+    For iPhone — early access open
+  </div>
+
+  <h1>Notice what's repeating.<br><em>Change one thing.</em></h1>
+
+  <p class="hero-sub">A fragment journal for people who already know their patterns. One sentence. Green or red. Your ledger remembers.</p>
+
+  <div class="hero-globes">
+    <div class="globe globe-g"></div>
+    <span class="globe-sep">green &nbsp;·&nbsp; red</span>
+    <div class="globe globe-r"></div>
+  </div>
+
+  <div class="waitlist-wrap">
+    <form class="waitlist-form" onsubmit="handleSubmit(event)">
+      <input class="waitlist-input" type="email" placeholder="your@email.com" required id="email-input" autocomplete="email"/>
+      <button class="waitlist-btn" type="submit">Get early access</button>
+    </form>
+    <p class="hero-note" id="form-note">No spam. You'll hear when early access opens.</p>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-section">
+  <p class="marquee-label">What Engel is about</p>
+  <div class="marquee-track">
+    <div class="marquee-set">
+      <span class="m-pill"><span class="m-pill-dot g"></span>Effort seen and counted</span>
+      <span class="m-pill"><span class="m-pill-dot n"></span>Witness before fix</span>
+      <span class="m-pill"><span class="m-pill-dot n"></span>Repetition without shame</span>
+      <span class="m-pill"><span class="m-pill-dot g"></span>ADHD — you've been working hard enough</span>
+      <span class="m-pill"><span class="m-pill-dot n"></span>Tough love inverted</span>
+      <span class="m-pill"><span class="m-pill-dot r"></span>Bravado and breakdown — both true</span>
+      <span class="m-pill"><span class="m-pill-dot n"></span>One sentence is another breath</span>
+    </div>
+    <div class="marquee-set" aria-hidden="true">
+      <span class="m-pill"><span class="m-pill-dot g"></span>Effort seen and counted</span>
+      <span class="m-pill"><span class="m-pill-dot n"></span>Witness before fix</span>
+      <span class="m-pill"><span class="m-pill-dot n"></span>Repetition without shame</span>
+      <span class="m-pill"><span class="m-pill-dot g"></span>ADHD — you've been working hard enough</span>
+      <span class="m-pill"><span class="m-pill-dot n"></span>Tough love inverted</span>
+      <span class="m-pill"><span class="m-pill-dot r"></span>Bravado and breakdown — both true</span>
+      <span class="m-pill"><span class="m-pill-dot n"></span>One sentence is another breath</span>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="section" id="how">
+  <div class="section-inner">
+    <p class="section-tag">Daily loop</p>
+    <h2 class="section-title">Capture. Sort. Notice.</h2>
+    <p class="section-body">Three steps. Fifteen seconds. No prompts to perform wellness or rate your mood on a scale of one to ten.</p>
+    <div class="loop-grid">
+      <div class="loop-cell">
+        <div class="loop-num">01</div>
+        <div class="loop-name">Capture</div>
+        <p class="loop-desc">One sentence. Voice or text. No blank-page overwhelm, no prompts, no minimum length. Skip is always fine.</p>
+      </div>
+      <div class="loop-cell">
+        <div class="loop-num">02</div>
+        <div class="loop-name">Sort</div>
+        <p class="loop-desc">Green (what rose, what held) or red (what fell, what cost you). Mixed when both. AI may suggest — you always decide.</p>
+      </div>
+      <div class="loop-cell">
+        <div class="loop-num">03</div>
+        <div class="loop-name">Notice</div>
+        <p class="loop-desc">At most one pattern per week. Asymmetry, contradiction, drift — stated as fact. Then silence. No advice.</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SCREENSHOTS -->
+<div class="section" id="screens">
+  <div class="section-inner">
+    <p class="section-tag">The app</p>
+    <h2 class="section-title">Screens from the iPhone build.</h2>
+    <p class="section-body">Dark room. Fraunces for display. Two breathing fields are the material the whole app is made of.</p>
+    <div class="shots">
+      <figure class="shot-wrap">
+        <div class="shot-img"><img src="screenshots/home.png" width="390" height="844" alt="Engel home screen" loading="lazy"/></div>
+        <figcaption>
+          <div class="shot-name">Home</div>
+          <div class="shot-label">Two fields. One noticing per week.</div>
+        </figcaption>
+      </figure>
+      <figure class="shot-wrap">
+        <div class="shot-img"><img src="screenshots/write.png" width="390" height="844" alt="Engel write screen" loading="lazy"/></div>
+        <figcaption>
+          <div class="shot-name">Write</div>
+          <div class="shot-label">One sentence, voice or text.</div>
+        </figcaption>
+      </figure>
+      <figure class="shot-wrap">
+        <div class="shot-img"><img src="screenshots/sort.png" width="390" height="844" alt="Engel sort screen" loading="lazy"/></div>
+        <figcaption>
+          <div class="shot-name">Sort</div>
+          <div class="shot-label">Green or red. The sort is the practice.</div>
+        </figcaption>
+      </figure>
+      <figure class="shot-wrap">
+        <div class="shot-img"><img src="screenshots/ask.png" width="390" height="844" alt="Engel ask screen" loading="lazy"/></div>
+        <figcaption>
+          <div class="shot-name">Ask</div>
+          <div class="shot-label">Your ledger remembers. No prescriptions.</div>
+        </figcaption>
+      </figure>
+      <figure class="shot-wrap">
+        <div class="shot-img"><img src="screenshots/entries.png" width="390" height="844" alt="Engel entries screen" loading="lazy"/></div>
+        <figcaption>
+          <div class="shot-name">Entries</div>
+          <div class="shot-label">Searchable. Export anytime.</div>
+        </figcaption>
+      </figure>
+    </div>
+  </div>
+</div>
+
+<!-- WHAT IT'S NOT -->
+<div class="section">
+  <div class="section-inner">
+    <p class="section-tag">What it's not</p>
+    <h2 class="section-title">Engel refuses the usual journal app posture.</h2>
+    <div class="not-grid">
+      <div class="not-item"><span class="not-dash">—</span>Not a productivity app or task manager</div>
+      <div class="not-item"><span class="not-dash">—</span>Not a habit tracker or streak machine</div>
+      <div class="not-item"><span class="not-dash">—</span>Not a mood logger or wellness journal</div>
+      <div class="not-item"><span class="not-dash">—</span>Not a therapist, coach, or advice engine</div>
+      <div class="not-item"><span class="not-dash">—</span>No scores, no guilt loops, no nudges</div>
+      <div class="not-item"><span class="not-dash">—</span>Never: journey, healing, you got this</div>
+    </div>
+  </div>
+</div>
+
+<!-- VOICE -->
+<div class="section">
+  <div class="section-inner">
+    <p class="section-tag">Voice</p>
+    <h2 class="section-title">Honest. Quiet. Non-motivational.</h2>
+    <p class="section-body">Second person. States data. Names the pattern, then stops.</p>
+    <div class="voice-block">
+      <div class="voice-row">
+        <span class="voice-tag bad">Without Engel</span>
+        <span class="voice-text">"Great job journaling 5 days in a row!"</span>
+      </div>
+      <div class="voice-row">
+        <span class="voice-tag good">Engel</span>
+        <span class="voice-text good-text">"Five days. Continue."</span>
+      </div>
+      <div class="voice-row">
+        <span class="voice-tag bad">Without Engel</span>
+        <span class="voice-text">"It looks like work has been challenging lately."</span>
+      </div>
+      <div class="voice-row">
+        <span class="voice-tag good">Engel</span>
+        <span class="voice-text good-text">"Work appears in six red entries this month. It also appears in three green ones."</span>
+      </div>
+      <div class="voice-row">
+        <span class="voice-tag good">Engel</span>
+        <span class="voice-text good-text">"Seven days since your last entry. Silence is also data. You were still here."</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FAQ -->
+<div class="section" id="faq">
+  <div class="section-inner">
+    <p class="section-tag">Questions</p>
+    <h2 class="section-title">Common questions.</h2>
+    <div class="faq-list">
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="toggleFaq(this)" aria-expanded="false">
+          <span class="faq-q">Is this a mood tracker?</span>
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-body">No mood scores. No scales. No wellness badges. You sort into green (what rose) or red (what fell). That physical decision is the whole practice.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="toggleFaq(this)" aria-expanded="false">
+          <span class="faq-q">Does it work for people with ADHD?</span>
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-body">Built with ADHD in mind. One sentence. No prompts. No streaks. No guilt for missing days. The app treats silence as data, not failure: "Seven days since your last entry. You were still here."</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="toggleFaq(this)" aria-expanded="false">
+          <span class="faq-q">What does the AI actually do?</span>
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-body">It may suggest a sort — you always override. It surfaces at most one pattern per week from your entries, stated as fact, never as advice. It answers questions from your ledger: specific counts, dates, tags. No prescriptions.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="toggleFaq(this)" aria-expanded="false">
+          <span class="faq-q">Can I export my data?</span>
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-body">Yes. Export is one tap. Your entries are yours.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="toggleFaq(this)" aria-expanded="false">
+          <span class="faq-q">When is it available?</span>
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-body">Coming to iPhone. Join the early access list above and we'll reach out before public launch.</div>
+      </div>
+      <div class="faq-item">
+        <button class="faq-trigger" onclick="toggleFaq(this)" aria-expanded="false">
+          <span class="faq-q">What's the difference between green and red?</span>
+          <span class="faq-icon" aria-hidden="true">+</span>
+        </button>
+        <div class="faq-body">Green is energy, wins, aliveness — what held, what was worth the effort. Red is friction, heaviness, stuck — what fell short, what cost you. Mixed when both are true. The fields aren't decoration. You write into them, sort into them, and read your life back out of them.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer>
+  <div>
+    <div class="footer-brand">Engel</div>
+    <p class="footer-sub">For iPhone. Coming soon.</p>
+  </div>
+  <div class="footer-right">
+    <a href="mailto:arssh.kumar10@gmail.com">arssh.kumar10@gmail.com</a><br>
+    <span style="margin-top:5px;display:block">© 2025 Engel</span>
+  </div>
+</footer>
+
+<script>
+function toggleFaq(btn) {
+  const item = btn.closest('.faq-item');
+  const wasOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item').forEach(i => {
+    i.classList.remove('open');
+    i.querySelector('.faq-trigger').setAttribute('aria-expanded', 'false');
+  });
+  if (!wasOpen) {
+    item.classList.add('open');
+    btn.setAttribute('aria-expanded', 'true');
+  }
+}
+
+function handleSubmit(e) {
+  e.preventDefault();
+  const input = document.getElementById('email-input');
+  const note = document.getElementById('form-note');
+  if (input.value && input.value.includes('@')) {
+    note.textContent = "You're on the list.";
+    note.style.color = 'rgba(74,222,128,0.65)';
+    input.value = '';
+  }
+}
+</script>
+</body>
+</html>

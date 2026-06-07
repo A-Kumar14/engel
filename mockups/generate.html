@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { background: #111; padding: 40px; display: flex; flex-wrap: wrap; gap: 40px; }
+
+  .phone {
+    width: 390px;
+    height: 844px;
+    background: #0c0c0e;
+    color: #ece7dd;
+    border-radius: 44px;
+    overflow: hidden;
+    position: relative;
+    font-family: "JetBrains Mono", monospace;
+    font-size: 13px;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .status {
+    height: 54px;
+    padding: 14px 28px 0;
+    display: flex;
+    justify-content: space-between;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  .content { padding: 0 18px; flex: 1; }
+
+  .fd { font-family: "Fraunces", Georgia, serif; font-optical-sizing: auto; }
+  .dim { color: rgba(236,231,221,0.56); }
+  .faint { color: rgba(236,231,221,0.32); }
+  .g-ink { color: #7fdca5; }
+  .r-ink { color: #e58a80; }
+  .green { color: #2d9e5a; }
+  .red { color: #c0392b; }
+
+  .eng-pane {
+    position: relative;
+    width: 140px;
+    height: 140px;
+    margin: 0 auto;
+    border-radius: 50%;
+    background: #070708;
+    overflow: hidden;
+  }
+
+  .eng-glow, .eng-core {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    border-radius: 50%;
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+  }
+  .eng-glow.g { width: 90%; height: 90%;
+    background: radial-gradient(circle at 50% 46%, rgba(120,236,170,0.95), rgba(79,208,137,0.5) 32%, rgba(45,158,90,0.15) 56%, transparent 72%);
+    filter: blur(14px); }
+  .eng-glow.r { width: 80%; height: 80%; top: 54%;
+    background: radial-gradient(circle at 50% 52%, rgba(231,120,108,0.85), rgba(224,88,74,0.45) 30%, rgba(120,30,24,0.18) 56%, transparent 70%);
+    filter: blur(13px); }
+  .eng-core.g { width: 40%; height: 40%;
+    background: radial-gradient(circle, rgba(214,255,232,0.95), rgba(120,236,170,0.4) 55%, transparent 76%);
+    filter: blur(7px); }
+  .eng-core.r { width: 34%; height: 34%; top: 54%;
+    background: radial-gradient(circle, rgba(255,210,200,0.7), rgba(231,120,108,0.32) 55%, transparent 78%);
+    filter: blur(8px); }
+
+  .card {
+    background: #161619;
+    border: 1px solid rgba(236,231,221,0.11);
+    border-radius: 18px;
+    padding: 18px;
+  }
+
+  .cap {
+    font-size: 10px;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .tabbar {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 84px;
+    padding: 8px 12px 28px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-around;
+    border-top: 1px solid rgba(236,231,221,0.06);
+    background: rgba(12,12,14,0.96);
+  }
+  .tab { text-align: center; font-size: 10px; color: rgba(236,231,221,0.32); }
+  .tab.on { color: #ece7dd; }
+  .tab .ico { font-size: 18px; margin-bottom: 4px; opacity: 0.7; }
+  .tab.on .ico { opacity: 1; }
+  .tab.plus .ico {
+    width: 44px; height: 44px; border-radius: 22px;
+    background: #ece7dd; color: #0c0c0e;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 22px; font-weight: 600; margin: -8px auto 4px;
+  }
+
+  .btn-primary {
+    background: #ece7dd;
+    color: #0c0c0e;
+    border-radius: 15px;
+    text-align: center;
+    padding: 18px;
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+  }
+
+  .btn-outline {
+    border: 1px solid rgba(236,231,221,0.11);
+    border-radius: 16px;
+    padding: 14px;
+  }
+
+  .globe-btn {
+    flex: 1;
+    border-radius: 12px;
+    border: 1px solid rgba(236,231,221,0.11);
+    padding: 14px 8px;
+    text-align: center;
+    font-size: 12px;
+  }
+  .globe-btn.on { border-color: rgba(236,231,221,0.35); background: rgba(236,231,221,0.06); }
+
+  .entry-row {
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(236,231,221,0.06);
+  }
+  .entry-row .frag {
+    font-family: "Fraunces", serif;
+    font-size: 16px;
+    font-weight: 300;
+    line-height: 1.45;
+    margin-top: 6px;
+  }
+
+  .msg-user {
+    align-self: flex-end;
+    background: #161619;
+    border-radius: 14px;
+    padding: 12px 14px;
+    max-width: 85%;
+    margin-left: auto;
+  }
+  .msg-ledger {
+    max-width: 92%;
+    line-height: 1.6;
+    color: rgba(236,231,221,0.88);
+  }
+</style>
+</head>
+<body>
+
+<!-- HOME -->
+<div class="phone" id="home">
+  <div class="status"><span>9:41</span><span>●●●</span></div>
+  <div style="padding: 0 18px 100px;">
+    <div class="fd" style="font-size: 26px; font-weight: 300; line-height: 1.15; margin-top: 8px;">
+      Morning.<br><span class="dim" style="font-style: italic;">What's true right now?</span>
+    </div>
+    <div style="display: flex; gap: 20px; justify-content: center; margin-top: 36px;">
+      <div class="eng-pane"><span class="eng-glow g"></span><span class="eng-core g"></span></div>
+      <div class="eng-pane"><span class="eng-glow r"></span><span class="eng-core r"></span></div>
+    </div>
+    <div style="text-align: center; margin-top: 18px; font-size: 13px;">
+      <span class="g-ink">12 green</span> <span class="faint">·</span> <span class="r-ink">8 red</span>
+    </div>
+    <div class="card" style="margin-top: 28px;">
+      <div class="cap faint">Noticing</div>
+      <div class="fd" style="font-size: 18px; font-weight: 400; margin-top: 10px; line-height: 1.4;">
+        Work appears in six red entries this month. It also appears in three green ones.
+      </div>
+    </div>
+    <div style="margin-top: 28px;">
+      <div class="btn-primary">WRITE</div>
+      <div class="btn-outline" style="margin-top: 10px; text-align: center; font-size: 14px; font-weight: 600; letter-spacing: 0.14em; padding: 18px;">
+        RECORD A FRAGMENT
+      </div>
+    </div>
+  </div>
+  <div class="tabbar">
+    <div class="tab on"><div class="ico">▦</div>Home</div>
+    <div class="tab"><div class="ico">▤</div>Entries</div>
+    <div class="tab plus"><div class="ico">+</div></div>
+    <div class="tab"><div class="ico">✎</div>Write</div>
+    <div class="tab"><div class="ico">◉</div>Ask</div>
+  </div>
+</div>
+
+<!-- WRITE -->
+<div class="phone" id="write">
+  <div class="status"><span>9:41</span><span>●●●</span></div>
+  <div style="padding: 0 18px 90px;">
+    <div class="fd" style="font-size: 24px; font-weight: 300; margin-top: 22px;">What's true right now?</div>
+    <div class="card" style="margin-top: 18px; min-height: 260px; background: #161619;">
+      <div class="fd" style="font-size: 15px; font-weight: 400; line-height: 1.55; color: #ece7dd;">
+        I said I'd leave early. I didn't. Same meeting ran long again.
+      </div>
+      <div style="border-top: 1px solid rgba(236,231,221,0.08); margin-top: 180px; padding-top: 10px; display: flex; justify-content: space-between;">
+        <span class="dim" style="font-size: 11px;">72 characters</span>
+        <span class="dim" style="font-size: 10px;"><span class="green">●</span> will sync</span>
+      </div>
+    </div>
+    <div class="btn-outline" style="margin-top: 14px; display: flex; gap: 14px; align-items: center;">
+      <span style="width: 40px; height: 40px; border-radius: 20px; background: rgba(236,231,221,0.08); display: inline-flex; align-items: center; justify-content: center;">🎤</span>
+      <div>
+        <div style="font-weight: 500;">Prefer your voice?</div>
+        <div class="dim" style="font-size: 11px; margin-top: 2px;">Record instead · we'll transcribe it</div>
+      </div>
+    </div>
+    <div class="fd dim" style="font-size: 14px; font-style: italic; margin-top: 16px; line-height: 1.5;">
+      No prescriptions. No scoring.<br>Skip is always fine.
+    </div>
+    <div class="btn-primary" style="margin-top: 200px; border-radius: 16px;">SAVE FRAGMENT →</div>
+  </div>
+  <div class="tabbar">
+    <div class="tab"><div class="ico">▦</div>Home</div>
+    <div class="tab"><div class="ico">▤</div>Entries</div>
+    <div class="tab plus"><div class="ico">+</div></div>
+    <div class="tab on"><div class="ico">✎</div>Write</div>
+    <div class="tab"><div class="ico">◉</div>Ask</div>
+  </div>
+</div>
+
+<!-- SORT -->
+<div class="phone" id="sort">
+  <div class="status"><span>9:41</span><span>●●●</span></div>
+  <div style="padding: 24px 18px 40px;">
+    <div class="fd" style="font-size: 24px;">Sort</div>
+    <div class="dim" style="font-size: 11px; margin-top: 8px; letter-spacing: 0.04em;">The sort is the practice. Decide.</div>
+    <div class="fd" style="font-size: 20px; font-weight: 300; font-style: italic; margin-top: 24px; line-height: 1.45; opacity: 0.88;">
+      I said I'd leave early. I didn't. Same meeting ran long again.
+    </div>
+    <div class="cap faint" style="margin-top: 32px;">Assign to globe</div>
+    <div style="display: flex; gap: 12px; margin-top: 12px;">
+      <div class="globe-btn on green">Green</div>
+      <div class="globe-btn faint">Mixed</div>
+      <div class="globe-btn red">Red</div>
+    </div>
+    <div class="dim" style="margin-top: 20px; text-decoration: underline; font-size: 13px;">skip for now</div>
+    <div class="faint" style="font-size: 11px; margin-top: 16px;">Tags are assigned automatically after save.</div>
+    <div class="btn-primary" style="margin-top: 28px; border-radius: 12px; font-size: 13px;">Save to globe</div>
+    <div style="display: flex; gap: 20px; justify-content: center; margin-top: 48px; opacity: 0.35;">
+      <div class="eng-pane" style="width: 80px; height: 80px;"><span class="eng-glow g"></span><span class="eng-core g"></span></div>
+      <div class="eng-pane" style="width: 80px; height: 80px;"><span class="eng-glow r"></span><span class="eng-core r"></span></div>
+    </div>
+  </div>
+</div>
+
+<!-- ASK -->
+<div class="phone" id="ask">
+  <div class="status"><span>9:41</span><span>●●●</span></div>
+  <div style="padding: 14px 18px 120px; display: flex; flex-direction: column; height: calc(100% - 54px);">
+    <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 20px;">
+      <span class="dim">‹</span>
+      <span class="fd" style="font-size: 22px;">Ask the ledger</span>
+    </div>
+    <div class="faint cap" style="margin-bottom: 16px;">Your entries · read back to you</div>
+    <div class="msg-user" style="margin-bottom: 16px;">What keeps showing up in red?</div>
+    <div class="msg-ledger fd" style="font-size: 17px; font-weight: 300; line-height: 1.55;">
+      Meetings appear in four red entries this month. "ran long" appears twice. "said I'd leave" appears once.
+    </div>
+    <div class="dim" style="font-size: 11px; margin-top: 12px;">Traceable to 4 entries · Mar 8–Apr 2</div>
+    <div style="margin-top: auto; border: 1px solid rgba(236,231,221,0.11); border-radius: 14px; padding: 14px; background: #161619;">
+      <span class="faint">Ask about your patterns…</span>
+    </div>
+  </div>
+  <div class="tabbar">
+    <div class="tab"><div class="ico">▦</div>Home</div>
+    <div class="tab"><div class="ico">▤</div>Entries</div>
+    <div class="tab plus"><div class="ico">+</div></div>
+    <div class="tab"><div class="ico">✎</div>Write</div>
+    <div class="tab on"><div class="ico">◉</div>Ask</div>
+  </div>
+</div>
+
+<!-- ENTRIES -->
+<div class="phone" id="entries">
+  <div class="status"><span>9:41</span><span>●●●</span></div>
+  <div style="padding: 0 18px 90px;">
+    <div class="fd" style="font-size: 24px; margin-top: 8px;">Entries</div>
+    <div style="margin-top: 16px; border: 1px solid rgba(236,231,221,0.11); border-radius: 12px; padding: 10px 14px; color: rgba(236,231,221,0.32); font-size: 13px;">Search fragments…</div>
+    <div style="display: flex; gap: 8px; margin-top: 14px;">
+      <span style="padding: 6px 12px; border-radius: 999px; border: 1px solid rgba(127,220,165,0.4); color: #7fdca5; font-size: 10px; letter-spacing: 0.1em;">GREEN</span>
+      <span style="padding: 6px 12px; border-radius: 999px; border: 1px solid rgba(236,231,221,0.11); color: rgba(236,231,221,0.32); font-size: 10px;">ALL</span>
+    </div>
+    <div class="entry-row">
+      <div class="cap g-ink">Green · Mar 28</div>
+      <div class="frag">Walked without headphones. Noticed the block I'd been avoiding.</div>
+    </div>
+    <div class="entry-row">
+      <div class="cap r-ink">Red · Mar 27</div>
+      <div class="frag dim" style="font-style: italic;">I said I'd leave early. I didn't. Same meeting ran long again.</div>
+    </div>
+    <div class="entry-row">
+      <div class="cap g-ink">Green · Mar 24</div>
+      <div class="frag">Finished the thing I'd been circling for two weeks. Not euphoric. Done.</div>
+    </div>
+  </div>
+  <div class="tabbar">
+    <div class="tab"><div class="ico">▦</div>Home</div>
+    <div class="tab on"><div class="ico">▤</div>Entries</div>
+    <div class="tab plus"><div class="ico">+</div></div>
+    <div class="tab"><div class="ico">✎</div>Write</div>
+    <div class="tab"><div class="ico">◉</div>Ask</div>
+  </div>
+</div>
+
+</body>
+</html>
