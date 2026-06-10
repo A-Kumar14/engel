@@ -1,3 +1,9 @@
+databases:
+  - name: engel-db
+    plan: free
+    databaseName: engel
+    user: engel
+
 services:
   - type: web
     name: engel-api
@@ -11,7 +17,9 @@ services:
       - key: PYTHON_VERSION
         value: "3.11.9"
       - key: DATABASE_URL
-        value: sqlite:////data/engel.db
+        fromDatabase:
+          name: engel-db
+          property: connectionString
       - key: CORS_ORIGINS
         value: https://a-kumar14.github.io
       - key: WAITLIST_SUCCESS_URL
@@ -22,7 +30,3 @@ services:
         sync: false
       - key: PUBLIC_API_BASE_URL
         sync: false
-    disk:
-      name: engel-data
-      mountPath: /data
-      sizeGB: 1
