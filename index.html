@@ -187,7 +187,7 @@ footer{margin-top:48px;padding:48px 48px;border-top:1px solid rgba(236,231,221,0
       <input class="waitlist-input" type="email" placeholder="your@email.com" required id="email-input" autocomplete="email"/>
       <button class="waitlist-btn" type="submit">Get early access</button>
     </form>
-    <p class="hero-note" id="form-note">No spam. You'll hear when early access opens.</p>
+    <p class="hero-note" id="form-note">No spam. Check your inbox to confirm.</p>
   </div>
 </section>
 
@@ -374,7 +374,7 @@ footer{margin-top:48px;padding:48px 48px;border-top:1px solid rgba(236,231,221,0
           <span class="faq-q">When is it available?</span>
           <span class="faq-icon" aria-hidden="true">+</span>
         </button>
-        <div class="faq-body">Coming to iPhone. Join the early access list above and we'll reach out before public launch.</div>
+        <div class="faq-body">Coming to iPhone. Join the early access list above — you'll get a confirmation email; click the link to finish signing up.</div>
       </div>
       <div class="faq-item">
         <button class="faq-trigger" onclick="toggleFaq(this)" aria-expanded="false">
@@ -398,6 +398,7 @@ footer{margin-top:48px;padding:48px 48px;border-top:1px solid rgba(236,231,221,0
   </div>
 </footer>
 
+<script src="config.js"></script>
 <script>
 function toggleFaq(btn) {
   const item = btn.closest('.faq-item');
@@ -412,14 +413,49 @@ function toggleFaq(btn) {
   }
 }
 
-function handleSubmit(e) {
+async function handleSubmit(e) {
   e.preventDefault();
   const input = document.getElementById('email-input');
   const note = document.getElementById('form-note');
-  if (input.value && input.value.includes('@')) {
-    note.textContent = "You're on the list.";
-    note.style.color = 'rgba(74,222,128,0.65)';
-    input.value = '';
+  const btn = e.target.querySelector('.waitlist-btn');
+  const email = input.value.trim();
+
+  if (!email || !email.includes('@')) return;
+
+  const apiBase = (window.ENGEL_CONFIG && window.ENGEL_CONFIG.API_BASE) || '';
+  if (!apiBase) {
+    note.textContent = 'Waitlist is not configured yet.';
+    note.style.color = 'rgba(248,113,113,0.8)';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.textContent = 'Sending…';
+  note.textContent = '';
+  note.style.color = '';
+
+  try {
+    const res = await fetch(`${apiBase.replace(/\/$/, '')}/api/waitlist/subscribe`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email }),
+    });
+    const data = await res.json().catch(() => ({}));
+
+    if (res.ok) {
+      note.textContent = data.message || 'Check your inbox to confirm your email.';
+      note.style.color = 'rgba(74,222,128,0.65)';
+      input.value = '';
+    } else {
+      note.textContent = data.detail || 'Something went wrong. Try again or email arssh.kumar10@gmail.com';
+      note.style.color = 'rgba(248,113,113,0.8)';
+    }
+  } catch (_) {
+    note.textContent = 'Could not reach the server. Try again in a moment.';
+    note.style.color = 'rgba(248,113,113,0.8)';
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Get early access';
   }
 }
 </script>

@@ -1,0 +1,28 @@
+services:
+  - type: web
+    name: engel-api
+    runtime: python
+    rootDir: backend
+    plan: free
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    healthCheckPath: /api/health
+    envVars:
+      - key: PYTHON_VERSION
+        value: "3.11.9"
+      - key: DATABASE_URL
+        value: sqlite:////data/engel.db
+      - key: CORS_ORIGINS
+        value: https://a-kumar14.github.io
+      - key: WAITLIST_SUCCESS_URL
+        value: https://a-kumar14.github.io/engel/confirmed.html
+      - key: RESEND_API_KEY
+        sync: false
+      - key: WAITLIST_FROM_EMAIL
+        sync: false
+      - key: PUBLIC_API_BASE_URL
+        sync: false
+    disk:
+      name: engel-data
+      mountPath: /data
+      sizeGB: 1
