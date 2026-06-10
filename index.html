@@ -36,14 +36,19 @@ body{background:#0c0c0e;color:#ece7dd;font-family:"Inter",system-ui,sans-serif;f
 
 .hero-sub{font-family:"Inter",sans-serif;font-size:clamp(14px,1.9vw,16px);font-weight:400;color:rgba(236,231,221,0.45);max-width:420px;margin:0 auto 52px;line-height:1.7}
 
-/* GLOBES */
-.hero-globes{display:flex;gap:14px;align-items:center;justify-content:center;margin-bottom:52px}
-.globe{width:54px;height:54px;border-radius:50%;flex-shrink:0}
-.globe-g{background:radial-gradient(circle at 38% 32%,#d6ffe8,#4ade80 36%,#14532d 68%,rgba(10,10,11,0.96));box-shadow:0 0 26px rgba(74,222,128,0.2),0 4px 14px rgba(0,0,0,0.4);animation:breatheG 6.5s ease-in-out infinite}
-.globe-r{background:radial-gradient(circle at 38% 32%,#ffd2c8,#f87171 36%,#4c1414 68%,rgba(10,10,11,0.96));box-shadow:0 0 26px rgba(248,113,113,0.16),0 4px 14px rgba(0,0,0,0.4);animation:breatheR 10s ease-in-out infinite}
-.globe-sep{font-family:"JetBrains Mono",monospace;font-size:11px;color:rgba(236,231,221,0.18);letter-spacing:0.08em}
-@keyframes breatheG{0%,100%{transform:scale(.93)}50%{transform:scale(1.06)}}
-@keyframes breatheR{0%,100%{transform:scale(.97)}50%{transform:scale(1.03)}}
+/* EngelField — living light (matches EngelField.swift / app home) */
+.hero-fields{display:flex;gap:clamp(20px,5vw,32px);align-items:center;justify-content:center;margin-bottom:52px}
+.engel-field-pane{position:relative;width:clamp(88px,14vw,120px);height:clamp(88px,14vw,120px);border-radius:50%;background:radial-gradient(circle at 50% 120%,rgba(255,255,255,0.02),#070708 60%);overflow:hidden;flex-shrink:0}
+.eng-glow,.eng-core{position:absolute;left:50%;top:50%;border-radius:50%;transform:translate(-50%,-50%);pointer-events:none;will-change:transform}
+.eng-glow.g{width:90%;height:90%;background:radial-gradient(circle at 50% 46%,rgba(120,236,170,0.95),rgba(79,208,137,0.5) 32%,rgba(45,158,90,0.15) 56%,transparent 72%);filter:blur(14px);animation:engBreatheG 6.5s ease-in-out infinite}
+.eng-glow.r{width:80%;height:80%;top:54%;background:radial-gradient(circle at 50% 52%,rgba(231,120,108,0.85),rgba(224,88,74,0.45) 30%,rgba(120,30,24,0.18) 56%,transparent 70%);filter:blur(13px);animation:engBreatheR 10s ease-in-out infinite}
+.eng-core.g{width:40%;height:40%;background:radial-gradient(circle,rgba(214,255,232,0.95),rgba(120,236,170,0.4) 55%,transparent 76%);filter:blur(7px);animation:engBreatheGCore 6.5s ease-in-out infinite}
+.eng-core.r{width:34%;height:34%;top:54%;background:radial-gradient(circle,rgba(255,210,200,0.7),rgba(231,120,108,0.32) 55%,transparent 78%);filter:blur(8px);animation:engBreatheRCore 10s ease-in-out infinite}
+@keyframes engBreatheG{0%,100%{transform:translate(-50%,-50%) scale(0.9)}50%{transform:translate(-50%,-50%) scale(1.08)}}
+@keyframes engBreatheGCore{0%,100%{transform:translate(-50%,-50%) scale(0.85)}50%{transform:translate(-50%,-50%) scale(1.06)}}
+@keyframes engBreatheR{0%,100%{transform:translate(-50%,-50%) scale(0.97)}50%{transform:translate(-50%,-50%) scale(1.03)}}
+@keyframes engBreatheRCore{0%,100%{transform:translate(-50%,-50%) scale(0.93)}50%{transform:translate(-50%,-50%) scale(1.02)}}
+.field-sep{font-family:"JetBrains Mono",monospace;font-size:11px;color:rgba(236,231,221,0.18);letter-spacing:0.08em}
 
 .hero-lines{max-width:420px;margin:0 auto;text-align:center;list-style:none}
 .hero-lines li{font-family:"Inter",system-ui,sans-serif;font-size:14px;font-weight:400;color:rgba(236,231,221,0.5);line-height:1.75;margin-bottom:8px;letter-spacing:0}
@@ -144,7 +149,7 @@ footer{margin-top:48px;padding:48px 48px;border-top:1px solid rgba(236,231,221,0
   .shots{grid-template-columns:repeat(2,1fr)}
 }
 @media(prefers-reduced-motion:reduce){
-  .badge-dot,.globe-g,.globe-r,.marquee-track{animation:none!important}
+  .badge-dot,.eng-glow,.eng-core,.marquee-track{animation:none!important}
 }
 </style>
 </head>
@@ -173,10 +178,16 @@ footer{margin-top:48px;padding:48px 48px;border-top:1px solid rgba(236,231,221,0
 
   <p class="hero-sub">A fragment journal for people who already know their patterns. One sentence. Green or red. Your ledger remembers.</p>
 
-  <div class="hero-globes">
-    <div class="globe globe-g"></div>
-    <span class="globe-sep">green &nbsp;·&nbsp; red</span>
-    <div class="globe globe-r"></div>
+  <div class="hero-fields" aria-hidden="true">
+    <div class="engel-field-pane">
+      <span class="eng-glow g"></span>
+      <span class="eng-core g"></span>
+    </div>
+    <span class="field-sep">green · red</span>
+    <div class="engel-field-pane">
+      <span class="eng-glow r"></span>
+      <span class="eng-core r"></span>
+    </div>
   </div>
 
   <ul class="hero-lines">
