@@ -20,7 +20,7 @@ body{background:#0c0c0e;color:#ece7dd;font-family:"Inter",system-ui,sans-serif;f
 .nav-links{display:flex;gap:36px;align-items:center}
 .nav-links a{font-size:13px;font-weight:400;color:rgba(236,231,221,0.45);text-decoration:none;transition:color .2s}
 .nav-links a:hover{color:#ece7dd}
-.nav-cta{background:rgba(236,231,221,0.06);border:1px solid rgba(236,231,221,0.14);color:rgba(236,231,221,0.85);font-family:"Inter",sans-serif;font-size:13px;font-weight:400;padding:8px 20px;border-radius:8px;cursor:pointer;transition:all .2s}
+.nav-cta{background:rgba(236,231,221,0.06);border:1px solid rgba(236,231,221,0.14);color:rgba(236,231,221,0.85);font-family:"Inter",sans-serif;font-size:13px;font-weight:400;padding:8px 20px;border-radius:8px;text-decoration:none;transition:all .2s}
 .nav-cta:hover{background:rgba(236,231,221,0.11);border-color:rgba(236,231,221,0.24);color:#ece7dd}
 
 /* HERO */
@@ -45,14 +45,11 @@ body{background:#0c0c0e;color:#ece7dd;font-family:"Inter",system-ui,sans-serif;f
 @keyframes breatheG{0%,100%{transform:scale(.93)}50%{transform:scale(1.06)}}
 @keyframes breatheR{0%,100%{transform:scale(.97)}50%{transform:scale(1.03)}}
 
-/* WAITLIST */
-.waitlist-wrap{width:100%;max-width:420px;margin:0 auto}
-.waitlist-form{display:flex;gap:0;border-radius:12px;overflow:hidden;border:1px solid rgba(236,231,221,0.12);background:rgba(236,231,221,0.03)}
-.waitlist-input{flex:1;background:transparent;border:none;outline:none;padding:13px 18px;font-family:"Inter",sans-serif;font-size:13px;font-weight:400;color:#ece7dd;min-width:0}
-.waitlist-input::placeholder{color:rgba(236,231,221,0.28)}
-.waitlist-btn{background:rgba(236,231,221,0.08);border:none;border-left:1px solid rgba(236,231,221,0.1);padding:13px 22px;font-family:"Inter",sans-serif;font-size:13px;font-weight:500;color:rgba(236,231,221,0.85);cursor:pointer;white-space:nowrap;transition:background .2s}
-.waitlist-btn:hover{background:rgba(236,231,221,0.14);color:#ece7dd}
-.hero-note{margin-top:12px;font-family:"Inter",sans-serif;font-size:12px;font-weight:400;color:rgba(236,231,221,0.22)}
+.hero-lines{max-width:420px;margin:0 auto;text-align:left;list-style:none}
+.hero-lines li{font-family:"JetBrains Mono",monospace;font-size:13px;color:rgba(236,231,221,0.72);line-height:1.65;margin-bottom:10px;letter-spacing:0.01em}
+.hero-lines li:last-child{margin-bottom:0}
+.hero-lines .g{color:#2d9e5a}
+.hero-lines .r{color:#c0392b}
 
 /* MARQUEE */
 .marquee-section{padding:56px 0;border-top:1px solid rgba(236,231,221,0.06);overflow:hidden;position:relative}
@@ -159,7 +156,7 @@ footer{margin-top:48px;padding:48px 48px;border-top:1px solid rgba(236,231,221,0
     <a href="#how">How it works</a>
     <a href="#screens">Screens</a>
     <a href="#faq">FAQ</a>
-    <button class="nav-cta" onclick="document.getElementById('email-input').focus()">Get early access</button>
+    <a href="mailto:arssh.kumar10@gmail.com" class="nav-cta">Contact</a>
   </div>
 </nav>
 
@@ -169,7 +166,7 @@ footer{margin-top:48px;padding:48px 48px;border-top:1px solid rgba(236,231,221,0
 
   <div class="hero-badge">
     <span class="badge-dot"></span>
-    For iPhone — early access open
+    For iPhone. Coming soon.
   </div>
 
   <h1>Notice what's repeating.<br><em>Change one thing.</em></h1>
@@ -182,13 +179,11 @@ footer{margin-top:48px;padding:48px 48px;border-top:1px solid rgba(236,231,221,0
     <div class="globe globe-r"></div>
   </div>
 
-  <div class="waitlist-wrap">
-    <form class="waitlist-form" onsubmit="handleSubmit(event)">
-      <input class="waitlist-input" type="email" placeholder="your@email.com" required id="email-input" autocomplete="email"/>
-      <button class="waitlist-btn" type="submit">Get early access</button>
-    </form>
-    <p class="hero-note" id="form-note">No spam. Check your inbox to confirm.</p>
-  </div>
+  <ul class="hero-lines">
+    <li>One sentence. 15 seconds. Write what's true right now.</li>
+    <li><span class="g">Green</span> or <span class="r">red</span>. The sort is the practice.</li>
+    <li>Your ledger remembers. Ask it what keeps repeating.</li>
+  </ul>
 </section>
 
 <!-- MARQUEE -->
@@ -374,7 +369,7 @@ footer{margin-top:48px;padding:48px 48px;border-top:1px solid rgba(236,231,221,0
           <span class="faq-q">When is it available?</span>
           <span class="faq-icon" aria-hidden="true">+</span>
         </button>
-        <div class="faq-body">Coming to iPhone. Join the early access list above — you'll get a confirmation email; click the link to finish signing up.</div>
+        <div class="faq-body">Coming to iPhone. Email below if you want to hear when it launches.</div>
       </div>
       <div class="faq-item">
         <button class="faq-trigger" onclick="toggleFaq(this)" aria-expanded="false">
@@ -398,7 +393,6 @@ footer{margin-top:48px;padding:48px 48px;border-top:1px solid rgba(236,231,221,0
   </div>
 </footer>
 
-<script src="config.js"></script>
 <script>
 function toggleFaq(btn) {
   const item = btn.closest('.faq-item');
@@ -410,52 +404,6 @@ function toggleFaq(btn) {
   if (!wasOpen) {
     item.classList.add('open');
     btn.setAttribute('aria-expanded', 'true');
-  }
-}
-
-async function handleSubmit(e) {
-  e.preventDefault();
-  const input = document.getElementById('email-input');
-  const note = document.getElementById('form-note');
-  const btn = e.target.querySelector('.waitlist-btn');
-  const email = input.value.trim();
-
-  if (!email || !email.includes('@')) return;
-
-  const apiBase = (window.ENGEL_CONFIG && window.ENGEL_CONFIG.API_BASE) || '';
-  if (!apiBase) {
-    note.textContent = 'Waitlist is not configured yet.';
-    note.style.color = 'rgba(248,113,113,0.8)';
-    return;
-  }
-
-  btn.disabled = true;
-  btn.textContent = 'Sending…';
-  note.textContent = '';
-  note.style.color = '';
-
-  try {
-    const res = await fetch(`${apiBase.replace(/\/$/, '')}/api/waitlist/subscribe`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ email }),
-    });
-    const data = await res.json().catch(() => ({}));
-
-    if (res.ok) {
-      note.textContent = data.message || 'Check your inbox to confirm your email.';
-      note.style.color = 'rgba(74,222,128,0.65)';
-      input.value = '';
-    } else {
-      note.textContent = data.detail || 'Something went wrong. Try again or email arssh.kumar10@gmail.com';
-      note.style.color = 'rgba(248,113,113,0.8)';
-    }
-  } catch (_) {
-    note.textContent = 'Could not reach the server. Try again in a moment.';
-    note.style.color = 'rgba(248,113,113,0.8)';
-  } finally {
-    btn.disabled = false;
-    btn.textContent = 'Get early access';
   }
 }
 </script>
