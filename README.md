@@ -9,40 +9,27 @@ This is the public repository for Engel. It bundles three things:
 
 | Path | What it is | Deploy target |
 |------|------------|---------------|
-| `docs/` | Marketing landing page + waitlist | GitHub Pages |
-| `engel/` | iOS app (SwiftUI) + FastAPI backend | App Store / Render |
-| `render.yaml` | Backend + Postgres service definition | [Render](https://render.com) |
+| `index.html` | Marketing landing page + waitlist | GitHub Pages |
+| `backend/` | FastAPI backend | Railway |
+| `backend/railway.toml` | Backend service definition | [Railway](https://railway.com) |
 
 ## Components
 
-### Landing page (`docs/`)
+### Landing page
 
-Static site served from GitHub Pages. Holds the marketing page, screenshots, and the email waitlist form. Posts to the backend's waitlist endpoint and redirects to a confirmation page on success.
+Static site at repo root (`index.html`), served on GitHub Pages.
 
-### iOS app (`engel/`)
-
-SwiftUI app, iOS 17+. Two globes on a simple home, voice/text capture, AI-assisted sorting, and weekly insights. Talks to the FastAPI backend. See [engel/README.md](engel/README.md) for app-specific setup.
-
-### Backend (`engel/backend/`)
+### Backend (`backend/`)
 
 FastAPI + SQLAlchemy. Serves entry storage, AI sorting, weekly insight generation, and the waitlist. SQLite for local dev, Postgres in production.
 
 ## Getting started
 
-### iOS app
-
-```bash
-cd engel
-xed .          # open in Xcode
-# or build from CLI
-xcodebuild -scheme engel -destination 'platform=iOS Simulator,name=iPhone 16' build
-```
-
 ### Backend
 
 ```bash
-cd engel/backend
-cp ../.env.example .env     # fill in API keys
+cd backend
+cp .env.example .env     # fill in API keys
 pip install -r requirements.txt
 uvicorn app.main:app --reload
 ```
@@ -51,16 +38,20 @@ API runs at `http://127.0.0.1:8000`. Health check: `/api/health`.
 
 ### Landing page
 
-Open `docs/index.html` directly, or serve the `docs/` folder:
+Open `index.html` directly, or serve the repo root:
 
 ```bash
-python -m http.server -d docs 8080
+python -m http.server 8080
 ```
 
 ## Deployment
 
-- **Landing page** → GitHub Pages, served from `docs/` at `a-kumar14.github.io/engel`.
-- **Backend + database** → Render, defined in `render.yaml` (web service + free Postgres). Set `RESEND_API_KEY`, `WAITLIST_FROM_EMAIL`, and `PUBLIC_API_BASE_URL` as secrets in the Render dashboard.
+- **Landing page** → GitHub Pages at `a-kumar14.github.io/engel` (`index.html`, `confirmed.html`).
+- **Backend + database** → Railway (`backend/railway.toml`). Add a Postgres plugin and set secrets in the Railway dashboard.
+
+See [DEPLOYMENT.md](DEPLOYMENT.md) for env vars, data migration from Render, and cutover steps.
+
+Required Railway secrets: `RESEND_API_KEY`, `WAITLIST_FROM_EMAIL`, `PUBLIC_API_BASE_URL`, and `DATABASE_URL` (from Postgres plugin).
 
 ## Design principles
 

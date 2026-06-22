@@ -1,3 +1,6 @@
+# Archived — Engel backend moved to Railway (see DEPLOYMENT.md).
+# rootDir: backend matches this repo layout.
+
 databases:
   - name: engel-db
     plan: free
